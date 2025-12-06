@@ -1,17 +1,16 @@
 import { test } from '../_fixtures/fixtures';
-import { ApiComposite } from '../../src/api/ApiComposite';
 
 test.use({ usersNumber: 2 });
 
-test(`Delete comment added by the another user`, async ({
+test('Delete comment added by the another user', async ({
+  api,
   registeredUsers,
-  userRequests,
 }) => {
   const userA = registeredUsers[0];
   const userB = registeredUsers[1];
 
-  const apiA = new ApiComposite(userRequests[0]);
-  const apiB = new ApiComposite(userRequests[1]);
+  const apiA = api[0];
+  const apiB = api[1];
 
   const aRes = await apiA.articles.createArticle(
     { title: `t-${Date.now()}`, description: 'd', body: 'b', tagList: [] },

@@ -1,15 +1,13 @@
 import { test } from '../_fixtures/fixtures';
-import { ApiComposite } from '../../src/api/ApiComposite';
 
 test.use({ usersNumber: 1 });
 
-test(`Create new comment without auth token`, async ({
+test('Create new comment without auth token', async ({
+  api,
   registeredUser,
-  userRequests,
-  request,
 }) => {
-  const apiAuth = new ApiComposite(userRequests[0]);
-  const apiAnon = new ApiComposite(request);
+  const apiAuth = api[0];
+  const apiAnon = api.anonymous; // assuming your fixture exposes anonymous API
 
   const createArticleRes = await apiAuth.articles.createArticle(
     { title: `t-${Date.now()}`, description: 'd', body: 'b', tagList: [] },

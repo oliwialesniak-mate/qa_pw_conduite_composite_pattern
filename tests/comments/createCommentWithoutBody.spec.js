@@ -1,21 +1,20 @@
 import { test } from '../_fixtures/fixtures';
-import { ApiComposite } from '../../src/api/ApiComposite';
 
 test.use({ usersNumber: 1 });
 
-test(`Create new comment without body field`, async ({
+test('Create new comment without body field', async ({
+  api,
   registeredUser,
-  userRequests,
 }) => {
-  const api = new ApiComposite(userRequests[0]);
+  const apiUser = api[0];
 
-  const aRes = await api.articles.createArticle(
+  const aRes = await apiUser.articles.createArticle(
     { title: `t-${Date.now()}`, description: 'd', body: 'b', tagList: [] },
     registeredUser.token,
   );
-  await api.articles.assertSuccessResponseCode(aRes);
+  await apiUser.articles.assertSuccessResponseCode(aRes);
   const slug = (await aRes.json()).article.slug;
 
-  const res = await api.comments.createCommentPayload(slug, { comment: {} }, registeredUser.token);
-  await api.comments.assertUnprocessableEntityResponseCode(res);
+  const res = await apiUser.comments.createCommentPayload(slug, { comment: {} }, registeredUser.token);
+  await apiUser.comments.assertUnprocessableEntityResponseCode(res);
 });

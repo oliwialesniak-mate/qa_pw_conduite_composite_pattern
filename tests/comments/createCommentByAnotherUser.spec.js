@@ -1,17 +1,16 @@
 import { test } from '../_fixtures/fixtures';
-import { ApiComposite } from '../../src/api/ApiComposite';
 
 test.use({ usersNumber: 2 });
 
-test(`Create new comment to the article created by another user`, async ({
+test('Create new comment to the article created by another user', async ({
+  api,
   registeredUsers,
-  userRequests,
 }) => {
   const userA = registeredUsers[0];
   const userB = registeredUsers[1];
 
-  const apiA = new ApiComposite(userRequests[0]);
-  const apiB = new ApiComposite(userRequests[1]);
+  const apiA = api[0];
+  const apiB = api[1];
 
   const article = {
     title: `t-${Date.now()}`,
