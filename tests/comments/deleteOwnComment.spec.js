@@ -13,6 +13,7 @@ test('Delete comment added by the same user', async ({
     registeredUser.token,
   );
   await apiUser.articles.assertSuccessResponseCode(aRes);
+
   const slug = (await aRes.json()).article.slug;
 
   const cRes = await apiUser.comments.createComment(
@@ -21,9 +22,14 @@ test('Delete comment added by the same user', async ({
     registeredUser.token,
   );
   await apiUser.comments.assertSuccessResponseCode(cRes);
+
   const commentId = (await cRes.json())?.comment?.id;
 
-  const delRes = await apiUser.comments.deleteComment(slug, commentId, registeredUser.token);
+  const delRes = await apiUser.comments.deleteComment(
+    slug,
+    commentId,
+    registeredUser.token,
+  );
   await apiUser.comments.assertSuccessResponseCode(delRes);
 
   const listRes = await apiUser.comments.getComments(slug, registeredUser.token);

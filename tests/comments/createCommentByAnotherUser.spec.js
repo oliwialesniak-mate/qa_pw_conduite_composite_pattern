@@ -29,6 +29,7 @@ test('Create new comment to the article created by another user', async ({
   await apiB.comments.assertCommentBodyEquals(createCommentRes, body);
 
   const commentId = (await createCommentRes.json())?.comment?.id;
+
   const listRes = await apiB.comments.getComments(slug, userB.token);
   await apiB.comments.assertSuccessResponseCode(listRes);
   await apiB.comments.assertCommentsListContainsId(listRes, commentId);

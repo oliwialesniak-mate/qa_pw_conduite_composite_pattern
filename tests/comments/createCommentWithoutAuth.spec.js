@@ -6,16 +6,18 @@ test('Create new comment without auth token', async ({
   api,
   registeredUser,
 }) => {
-  const apiAuth = api[0];
-  const apiAnon = api.anonymous; // assuming your fixture exposes anonymous API
+  const apiUser = api[0];
 
-  const createArticleRes = await apiAuth.articles.createArticle(
+  const createArticleRes = await apiUser.articles.createArticle(
     { title: `t-${Date.now()}`, description: 'd', body: 'b', tagList: [] },
     registeredUser.token,
   );
-  await apiAuth.articles.assertSuccessResponseCode(createArticleRes);
+  await apiUser.articles.assertSuccessResponseCode(createArticleRes);
+
   const slug = (await createArticleRes.json()).article.slug;
 
-  const res = await apiAnon.comments.createComment(slug, 'should fail', null);
-  await apiAnon.comments.assertForbiddenOrUnauthorizedResponseCode(res);
+  // Anonymous request: pass null token
+  const res = await apiUser.comments.createComment(slug, 'should fail', null);
+
+  await apiUser.comments.assertForbiddenOrUnauthorizedResponseCode(res);
 });

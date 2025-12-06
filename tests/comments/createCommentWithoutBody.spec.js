@@ -13,8 +13,14 @@ test('Create new comment without body field', async ({
     registeredUser.token,
   );
   await apiUser.articles.assertSuccessResponseCode(aRes);
+
   const slug = (await aRes.json()).article.slug;
 
-  const res = await apiUser.comments.createCommentPayload(slug, { comment: {} }, registeredUser.token);
+  const res = await apiUser.comments.createCommentPayload(
+    slug,
+    { comment: {} }, // no body
+    registeredUser.token,
+  );
+
   await apiUser.comments.assertUnprocessableEntityResponseCode(res);
 });

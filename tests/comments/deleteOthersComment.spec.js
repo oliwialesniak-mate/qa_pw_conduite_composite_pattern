@@ -2,7 +2,7 @@ import { test } from '../_fixtures/fixtures';
 
 test.use({ usersNumber: 2 });
 
-test('Delete comment added by the another user', async ({
+test('Delete comment added by another user', async ({
   api,
   registeredUsers,
 }) => {
@@ -17,6 +17,7 @@ test('Delete comment added by the another user', async ({
     userA.token,
   );
   await apiA.articles.assertSuccessResponseCode(aRes);
+
   const slug = (await aRes.json()).article.slug;
 
   const cRes = await apiB.comments.createComment(
@@ -25,8 +26,11 @@ test('Delete comment added by the another user', async ({
     userB.token,
   );
   await apiB.comments.assertSuccessResponseCode(cRes);
+
   const commentId = (await cRes.json())?.comment?.id;
 
+  // User A trying to delete user B’s comment should fail
   const delRes = await apiA.comments.deleteComment(slug, commentId, userA.token);
+
   await apiA.comments.assertForbiddenOrUnauthorizedResponseCode(delRes);
 });
